@@ -25,10 +25,13 @@ export default function Portfolio() {
   }
 
   return (
-    <div>
+    <div className="max-w-6xl mx-auto px-6 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-white tracking-tight">Portfolio</h1>
-        <p className="text-sm text-gray-500 mt-1">View token holdings for any wallet</p>
+        <div className="inline-block mb-3 px-3 py-1 rounded-full border border-[#4f8ef7]/20 bg-[#4f8ef7]/5 text-[#4f8ef7] text-xs font-medium">
+          Portfolio Tracker
+        </div>
+        <h1 className="text-3xl font-bold text-white tracking-tight">Your Portfolio</h1>
+        <p className="text-sm text-gray-500 mt-2">View token holdings and total value for any wallet</p>
       </div>
 
       <form onSubmit={handleSearch} className="flex gap-3 mb-8">
@@ -37,19 +40,24 @@ export default function Portfolio() {
           value={wallet}
           onChange={(e) => setWallet(e.target.value)}
           placeholder="Enter Solana wallet address..."
-          className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-indigo-500/50 transition-colors font-mono"
+          className="input-dark flex-1 rounded-xl px-5 py-3 text-sm font-mono"
         />
         <button
           type="submit"
           disabled={loading || !wallet.trim()}
-          className="rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="btn-teal px-6 py-3 rounded-xl text-sm"
         >
-          {loading ? 'Loading...' : 'Search'}
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <span className="h-4 w-4 border-2 border-[#0a0e1a] border-t-transparent rounded-full animate-spin" />
+              Loading...
+            </span>
+          ) : 'Search'}
         </button>
       </form>
 
       {error && (
-        <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3 mb-6">
+        <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-4 mb-6">
           {error}
         </div>
       )}
