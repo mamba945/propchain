@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { fetchProperty } from '../lib/api'
 import BuyTokensModal from '../components/BuyTokensModal'
@@ -10,6 +10,8 @@ export default function PropertyDetail() {
   const [error, setError] = useState(null)
   const [showBuy, setShowBuy] = useState(false)
   const [txResult, setTxResult] = useState(null)
+  const [progressVisible, setProgressVisible] = useState(false)
+  const progressRef = useRef(null)
 
   useEffect(() => {
     fetchProperty(id)
@@ -17,6 +19,17 @@ export default function PropertyDetail() {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [id])
+
+  // Trigger progress bar animation when it enters view
+  useEffect(() => {
+    if (!property) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setProgressVisible(true) },
+      { threshold: 0.3 }
+    )
+    if (progressRef.current) observer.observe(progressRef.current)
+    return () => observer.disconnect()
+  }, [property])
 
   function handleBuySuccess(result) {
     setTxResult(result)
@@ -26,15 +39,39 @@ export default function PropertyDetail() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <div className="h-8 w-8 border-2 border-[#00d4aa] border-t-transparent rounded-full animate-spin" />
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        <div className="skeleton h-4 w-32 mb-8 rounded-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <div>
+              <div className="skeleton h-3 w-24 rounded-full mb-3" />
+              <div className="skeleton h-9 w-3/4 mb-3" />
+              <div className="skeleton h-3 w-1/2" />
+            </div>
+            <div className="skeleton h-16 w-full" />
+            <div className="grid grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-16 rounded-xl" />)}
+            </div>
+            <div className="skeleton h-14 w-full rounded-2xl" />
+          </div>
+          <div className="card-accent p-6 h-fit space-y-5">
+            <div className="skeleton h-5 w-24" />
+            <div className="skeleton h-12 w-32" />
+            <div className="skeleton h-px w-full" />
+            <div className="space-y-3">
+              <div className="skeleton h-4 w-full" />
+              <div className="skeleton h-4 w-full" />
+            </div>
+            <div className="skeleton h-11 w-full rounded-xl" />
+          </div>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="text-center py-32">
+      <div className="text-center py-32 animate-fade-up">
         <p className="text-red-400 text-sm">{error}</p>
         <Link to="/" className="text-[#00d4aa] text-sm mt-3 inline-block hover:underline">&larr; Back to properties</Link>
       </div>
@@ -47,7 +84,7 @@ export default function PropertyDetail() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
-      <Link to="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#00d4aa] transition-colors mb-8">
+      <Link to="/" className="animate-fade-up inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#00d4aa] transition-colors mb-8">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
@@ -57,7 +94,7 @@ export default function PropertyDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Property Info */}
         <div className="lg:col-span-2 space-y-6">
-          <div>
+          <div className="animate-fade-up stagger-1">
             <div className="inline-block mb-3 px-3 py-1 rounded-full border border-[#00d4aa]/20 bg-[#00d4aa]/5 text-[#00d4aa] text-xs font-medium">
               Active Offering
             </div>
@@ -72,31 +109,31 @@ export default function PropertyDetail() {
           </div>
 
           {property.description && (
-            <p className="text-sm text-gray-400 leading-relaxed">{property.description}</p>
+            <p className="animate-fade-up stagger-2 text-sm text-gray-400 leading-relaxed">{property.description}</p>
           )}
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="animate-fade-up stagger-2 grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Stat label="Price/Token" value={`${Number(property.price_per_token).toFixed(2)} SOL`} highlight />
             <Stat label="Total Supply" value={property.total_tokens.toLocaleString()} />
             <Stat label="Available" value={property.tokens_available.toLocaleString()} />
             <Stat label="Funded" value={`${progress.toFixed(0)}%`} highlight />
           </div>
 
-          <div className="card-dark p-5">
+          <div ref={progressRef} className="animate-fade-up stagger-3 card-dark p-5">
             <div className="flex justify-between text-xs text-gray-500 mb-2">
               <span>{property.tokens_available.toLocaleString()} tokens remaining</span>
               <span className="text-[#00d4aa]">{progress.toFixed(1)}% funded</span>
             </div>
             <div className="h-2.5 rounded-full bg-[#1a2332] overflow-hidden">
               <div
-                className="progress-teal h-full transition-all duration-500"
-                style={{ width: `${Math.min(progress, 100)}%` }}
+                className={`progress-teal h-full ${progressVisible ? 'progress-animate' : ''}`}
+                style={{ width: progressVisible ? `${Math.min(progress, 100)}%` : '0%' }}
               />
             </div>
           </div>
 
           {property.mint_address && (
-            <div className="text-xs text-gray-600 flex items-center gap-2">
+            <div className="animate-fade-up stagger-4 text-xs text-gray-600 flex items-center gap-2">
               <span className="text-gray-500">Mint Address:</span>
               <code className="font-mono text-[#4f8ef7] bg-[#4f8ef7]/5 px-2 py-0.5 rounded">{property.mint_address}</code>
             </div>
@@ -104,7 +141,7 @@ export default function PropertyDetail() {
         </div>
 
         {/* Buy Panel */}
-        <div className="card-accent p-6 h-fit space-y-5">
+        <div className="animate-fade-up stagger-2 card-accent p-6 h-fit space-y-5">
           <h2 className="text-lg font-semibold text-white">Invest Now</h2>
           <div>
             <div className="text-4xl font-mono font-bold text-white">
@@ -127,7 +164,7 @@ export default function PropertyDetail() {
           <button
             onClick={() => setShowBuy(true)}
             disabled={property.tokens_available === 0}
-            className="btn-teal w-full px-4 py-3 rounded-xl text-sm"
+            className="btn-teal btn-teal-pulse w-full px-4 py-3 rounded-xl text-sm"
           >
             {property.tokens_available === 0 ? 'Sold Out' : 'Buy Tokens'}
           </button>
@@ -136,7 +173,7 @@ export default function PropertyDetail() {
 
       {/* Transaction Result */}
       {txResult && (
-        <div className="mt-8 card-dark p-5 border-[#00d4aa]/20">
+        <div className="mt-8 card-dark p-5 border-[#00d4aa]/20 animate-fade-up">
           <h3 className="text-sm font-semibold text-[#00d4aa] mb-3 flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -169,7 +206,7 @@ export default function PropertyDetail() {
 
 function Stat({ label, value, highlight }) {
   return (
-    <div className="stat-card px-4 py-3">
+    <div className="stat-card px-4 py-3 transition-transform duration-200 hover:-translate-y-0.5">
       <p className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">{label}</p>
       <p className={`text-sm font-mono font-semibold ${highlight ? 'text-[#00d4aa]' : 'text-white'}`}>{value}</p>
     </div>

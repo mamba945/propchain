@@ -26,7 +26,7 @@ export default function Portfolio() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
-      <div className="mb-8">
+      <div className="animate-fade-up mb-8">
         <div className="inline-block mb-3 px-3 py-1 rounded-full border border-[#4f8ef7]/20 bg-[#4f8ef7]/5 text-[#4f8ef7] text-xs font-medium">
           Portfolio Tracker
         </div>
@@ -34,7 +34,7 @@ export default function Portfolio() {
         <p className="text-sm text-gray-500 mt-2">View token holdings and total value for any wallet</p>
       </div>
 
-      <form onSubmit={handleSearch} className="flex gap-3 mb-8">
+      <form onSubmit={handleSearch} className="animate-fade-up stagger-1 flex gap-3 mb-8">
         <input
           type="text"
           value={wallet}
@@ -57,13 +57,15 @@ export default function Portfolio() {
       </form>
 
       {error && (
-        <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-4 mb-6">
+        <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-4 mb-6 animate-fade-up">
           {error}
         </div>
       )}
 
       {portfolio && (
-        <PortfolioTable holdings={portfolio.holdings} totalValue={portfolio.total_value} />
+        <div className="animate-fade-up">
+          <PortfolioTable holdings={portfolio.holdings} totalValue={portfolio.total_value} />
+        </div>
       )}
     </div>
   )

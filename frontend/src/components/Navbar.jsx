@@ -1,7 +1,15 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 export default function Navbar() {
   const { pathname } = useLocation()
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const linkClass = (path) =>
     `text-sm font-medium transition-all duration-300 ${
@@ -11,10 +19,18 @@ export default function Navbar() {
     }`
 
   return (
-    <nav className="nav-glass sticky top-0 z-50">
+    <nav
+      className="nav-glass sticky top-0 z-50 transition-all duration-300 animate-fade-up"
+      style={{
+        boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.4), 0 1px 0 rgba(0,212,170,0.08)' : 'none',
+        background: scrolled
+          ? 'rgba(10, 14, 26, 0.95)'
+          : 'rgba(10, 14, 26, 0.85)',
+      }}
+    >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00d4aa] to-[#4f8ef7] flex items-center justify-center text-xs font-bold text-[#0a0e1a] shadow-[0_0_15px_rgba(0,212,170,0.3)] group-hover:shadow-[0_0_25px_rgba(0,212,170,0.5)] transition-shadow">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00d4aa] to-[#4f8ef7] flex items-center justify-center text-xs font-bold text-[#0a0e1a] shadow-[0_0_15px_rgba(0,212,170,0.3)] group-hover:shadow-[0_0_25px_rgba(0,212,170,0.5)] transition-shadow duration-300">
             P
           </div>
           <span className="text-white font-bold tracking-tight text-lg">

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { buyTokens } from '../lib/api'
 
 export default function BuyTokensModal({ property, onClose, onSuccess }) {
@@ -6,8 +6,21 @@ export default function BuyTokensModal({ property, onClose, onSuccess }) {
   const [amount, setAmount] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [closing, setClosing] = useState(false)
 
   const totalCost = amount ? (Number(amount) * Number(property.price_per_token)).toFixed(4) : '0'
+
+  function handleClose() {
+    setClosing(true)
+    setTimeout(onClose, 200)
+  }
+
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') handleClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -24,14 +37,22 @@ export default function BuyTokensModal({ property, onClose, onSuccess }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={onClose}>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm ${closing ? 'modal-backdrop-exit' : 'modal-backdrop-enter'}`}
+      onClick={handleClose}
+    >
       <div
-        className="w-full max-w-md card-accent p-6 shadow-2xl shadow-black/50"
+        className={`w-full max-w-md card-accent p-6 shadow-2xl shadow-black/50 ${closing ? 'modal-content-exit' : 'modal-content-enter'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-white">Buy Tokens</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-[#00d4aa] text-xl leading-none transition-colors">&times;</button>
+          <button
+            onClick={handleClose}
+            className="text-gray-500 hover:text-[#00d4aa] text-xl leading-none transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#00d4aa]/10"
+          >
+            &times;
+          </button>
         </div>
 
         <p className="text-sm text-gray-400 mb-6">
@@ -39,7 +60,7 @@ export default function BuyTokensModal({ property, onClose, onSuccess }) {
         </p>
 
         {error && (
-          <div className="mb-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+          <div className="mb-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 animate-fade-up">
             {error}
           </div>
         )}
@@ -73,7 +94,7 @@ export default function BuyTokensModal({ property, onClose, onSuccess }) {
             />
           </div>
 
-          <div className="flex items-center justify-between rounded-xl bg-[#0a0e1a] border border-[#00d4aa]/10 px-5 py-4">
+          <div className="flex items-center justify-between rounded-xl bg-[#0a0e1a] border border-[#00d4aa]/10 px-5 py-4 transition-all duration-300">
             <span className="text-sm text-gray-500">Total Cost</span>
             <span className="text-xl font-mono font-bold text-[#00d4aa]">{totalCost} SOL</span>
           </div>
@@ -81,7 +102,7 @@ export default function BuyTokensModal({ property, onClose, onSuccess }) {
           <button
             type="submit"
             disabled={loading || !amount || !wallet}
-            className="btn-teal w-full px-4 py-3 rounded-xl text-sm"
+            className="btn-teal btn-teal-pulse w-full px-4 py-3 rounded-xl text-sm"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

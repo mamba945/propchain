@@ -1,10 +1,12 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import PropertyDetail from './pages/PropertyDetail'
 import Portfolio from './pages/Portfolio'
 
 export default function App() {
+  const location = useLocation()
+
   return (
     <div className="min-h-screen bg-[#0a0e1a] text-gray-100 relative overflow-hidden">
       {/* Background orbs */}
@@ -14,7 +16,7 @@ export default function App() {
 
       <div className="relative z-10">
         <Navbar />
-        <main>
+        <main key={location.pathname} className="page-transition">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/property/:id" element={<PropertyDetail />} />
