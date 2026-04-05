@@ -11,7 +11,10 @@
       "Bash(python -c \"import ast; ast.parse\\(open\\(''app/schemas.py''\\).read\\(\\)\\); print\\(''schemas.py OK''\\)\")",
       "Bash(pip install:*)",
       "Bash(python -m uvicorn app.main:app --reload --port 8000)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(grep -v \"^\\\\.$\\\\|^\\\\.\\\\.$\\\\|\\\\.git\\\\|venv\\\\|\\\\.claude\")",
+      "Bash(npm create:*)",
+      "Bash(npx vite:*)"
     ]
   }
 }
