@@ -44,7 +44,9 @@ class BuyTokensResponse(BaseModel):
     wallet_address: str
     amount_purchased: int
     total_cost: Decimal
-    mock_tx_signature: str
+    tx_signature: str | None = None
+    serialized_tx: str | None = None
+    mock: bool = False
 
 
 # Portfolio schemas

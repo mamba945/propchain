@@ -4,7 +4,14 @@
       "Bash(pip --version)",
       "Bash(mkdir -p /c/Users/yeedigenv/OneDrive/Desktop/decenthraton/propchain/anchor/programs/propchain/src)",
       "Bash(mkdir -p /c/Users/yeedigenv/OneDrive/Desktop/decenthraton/propchain/anchor/tests)",
-      "Bash(mkdir -p /c/Users/yeedigenv/OneDrive/Desktop/decenthraton/propchain/anchor/migrations)"
+      "Bash(mkdir -p /c/Users/yeedigenv/OneDrive/Desktop/decenthraton/propchain/anchor/migrations)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app/solana_client.py''\\).read\\(\\)\\); print\\(''solana_client.py OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app/routers/properties.py''\\).read\\(\\)\\); print\\(''properties.py OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app/main.py''\\).read\\(\\)\\); print\\(''main.py OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app/schemas.py''\\).read\\(\\)\\); print\\(''schemas.py OK''\\)\")",
+      "Bash(pip install:*)",
+      "Bash(python -m uvicorn app.main:app --reload --port 8000)",
+      "Bash(curl:*)"
     ]
   }
 }

@@ -6,3 +6,5 @@ pydantic==2.11.1
 pydantic-settings==2.9.1
 python-dotenv==1.1.0
 alembic==1.15.2
+solana==0.35.0
+solders==0.21.0

@@ -2,12 +2,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.database import init_db
 from app.routers import properties, tokens
+from app.solana_client import solana_client
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
     yield
+    await solana_client.close()
 
 
 app = FastAPI(
@@ -23,4 +25,8 @@ app.include_router(tokens.router)
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "solana_configured": solana_client.configured,
+        "program_id": str(solana_client.program_id),
+    }
