@@ -2,6 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { fetchProperty } from '../lib/api'
 import BuyTokensModal from '../components/BuyTokensModal'
+import RentSimulator from '../components/RentSimulator'
+
+const VERIFIED_ADDRESS = '73x5L22cQX2i8tTs9pv1pVpC3oGWxaAvBAbC9VFJyGKz'
+const EXPLORER_CLUSTER = 'devnet'
 
 export default function PropertyDetail() {
   const { id } = useParams()
@@ -99,6 +103,17 @@ export default function PropertyDetail() {
               Active Offering
             </div>
             <h1 className="text-3xl font-bold text-white tracking-tight">{property.title}</h1>
+            <a
+              href={`https://explorer.solana.com/address/${VERIFIED_ADDRESS}?cluster=${EXPLORER_CLUSTER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full border border-[#00d4aa]/30 bg-[#00d4aa]/5 text-[#00d4aa] text-xs font-medium hover:bg-[#00d4aa]/10 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Verified on Solana
+            </a>
             <p className="text-sm text-gray-500 mt-2 flex items-center gap-1.5">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -171,6 +186,8 @@ export default function PropertyDetail() {
         </div>
       </div>
 
+      <RentSimulator property={property} />
+
       {/* Transaction Result */}
       {txResult && (
         <div className="mt-8 card-dark p-5 border-[#00d4aa]/20 animate-fade-up">
@@ -184,7 +201,21 @@ export default function PropertyDetail() {
             <p>Purchased <span className="text-white font-mono">{txResult.amount_purchased}</span> tokens</p>
             <p>Total cost: <span className="text-white font-mono">{Number(txResult.total_cost).toFixed(4)} SOL</span></p>
             {txResult.tx_signature && (
-              <p>TX: <code className="font-mono text-[#4f8ef7] break-all">{txResult.tx_signature}</code></p>
+              <p className="flex flex-wrap items-center gap-2">
+                <span>TX:</span>
+                <code className="font-mono text-[#4f8ef7] break-all">{txResult.tx_signature}</code>
+                <a
+                  href={`https://explorer.solana.com/tx/${txResult.tx_signature}?cluster=${EXPLORER_CLUSTER}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#00d4aa]/30 bg-[#00d4aa]/5 text-[#00d4aa] hover:bg-[#00d4aa]/10 transition-colors"
+                >
+                  View on Explorer
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </p>
             )}
             {txResult.mock && (
               <p className="text-yellow-500/70 mt-2">Mock transaction (Solana devnet not configured)</p>
