@@ -3,7 +3,7 @@
 import httpx
 import sys
 
-API = "http://localhost:8000/properties"
+API = "https://propchain-4s7p.onrender.com"
 
 PROPERTIES = [
     {
@@ -50,7 +50,7 @@ def main():
     with httpx.Client(timeout=10) as client:
         for prop in PROPERTIES:
             print(f"Creating: {prop['title']}...", end=" ")
-            resp = client.post(API, json=prop)
+            resp = client.post(f"{API}/properties", json=prop)
             if resp.status_code == 201:
                 data = resp.json()
                 print(f"OK (id={data['id']})")

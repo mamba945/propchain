@@ -38,11 +38,11 @@ export default function BuyTokensModal({ property, onClose, onSuccess }) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm ${closing ? 'modal-backdrop-exit' : 'modal-backdrop-enter'}`}
+      className={`fixed inset-0 z-50 flex items-stretch sm:items-center justify-center bg-black/70 backdrop-blur-sm sm:p-4 ${closing ? 'modal-backdrop-exit' : 'modal-backdrop-enter'}`}
       onClick={handleClose}
     >
       <div
-        className={`w-full max-w-md card-accent p-6 shadow-2xl shadow-black/50 ${closing ? 'modal-content-exit' : 'modal-content-enter'}`}
+        className={`w-full h-full sm:h-auto sm:max-w-md card-accent p-6 shadow-2xl shadow-black/50 overflow-y-auto sm:overflow-visible sm:rounded-2xl ${closing ? 'modal-content-exit' : 'modal-content-enter'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">

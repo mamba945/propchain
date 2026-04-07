@@ -77,21 +77,21 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative py-20 px-6">
+      <section className="relative py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto text-center">
           <div className="animate-fade-up inline-block mb-6 px-4 py-1.5 rounded-full border border-[#00d4aa]/20 bg-[#00d4aa]/5 text-[#00d4aa] text-xs font-medium tracking-wide">
             Built on Solana
           </div>
-          <h1 className="animate-fade-up stagger-1 text-5xl sm:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+          <h1 className="animate-fade-up stagger-1 text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
             Fractional Real Estate
             <br />
             <span className="gradient-text">Powered by Blockchain</span>
           </h1>
-          <p className="animate-fade-up stagger-2 text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="animate-fade-up stagger-2 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
             Invest in premium properties worldwide with as little as one token.
             Transparent, secure, and fully on-chain.
           </p>
-          <div className="animate-fade-up stagger-3 flex items-center justify-center gap-4">
+          <div className="animate-fade-up stagger-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <a href="#properties" className="btn-teal px-8 py-3 rounded-xl text-sm">
               Explore Properties
             </a>
@@ -125,7 +125,7 @@ export default function Home() {
       </section>
 
       {/* Properties Section */}
-      <section id="properties" className="max-w-6xl mx-auto px-6 pb-20">
+      <section id="properties" className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
         <div className="animate-fade-up flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-bold text-white tracking-tight">Featured Properties</h2>

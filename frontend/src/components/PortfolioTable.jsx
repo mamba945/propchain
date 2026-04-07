@@ -15,8 +15,8 @@ export default function PortfolioTable({ holdings, totalValue }) {
   }
 
   return (
-    <div className="card-dark overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="card-dark overflow-x-auto">
+      <table className="w-full min-w-[600px] text-sm">
         <thead>
           <tr className="border-b border-[#00d4aa]/10 bg-[#0a0e1a]/50">
             <th className="text-left px-5 py-3.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Property</th>

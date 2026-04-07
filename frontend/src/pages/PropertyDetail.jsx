@@ -87,7 +87,7 @@ export default function PropertyDetail() {
     : 0
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <Link to="/" className="animate-fade-up inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#00d4aa] transition-colors mb-8">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -102,7 +102,7 @@ export default function PropertyDetail() {
             <div className="inline-block mb-3 px-3 py-1 rounded-full border border-[#00d4aa]/20 bg-[#00d4aa]/5 text-[#00d4aa] text-xs font-medium">
               Active Offering
             </div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">{property.title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{property.title}</h1>
             <a
               href={`https://explorer.solana.com/address/${VERIFIED_ADDRESS}?cluster=${EXPLORER_CLUSTER}`}
               target="_blank"
